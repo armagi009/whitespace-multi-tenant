@@ -3,7 +3,7 @@ import { Opportunity, Vertical, OpportunityTrend, SourceReliability, Opportunity
 
 // NOTE: In a real production app, API calls should go through a proxy backend 
 // to keep the key secure. For this demo, we assume the environment variable is set.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export const generateOpportunityBrief = async (opp: Opportunity): Promise<string> => {
   const prompt = `
