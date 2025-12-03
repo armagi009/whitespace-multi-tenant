@@ -141,3 +141,12 @@ export const analyzeManualEntry = async (description: string, vertical: string, 
         };
     }
 };
+
+export const createChatSession = (systemInstruction: string) => {
+    return ai.chats.create({
+        model: 'gemini-2.5-flash',
+        config: {
+            systemInstruction: systemInstruction,
+        }
+    });
+};

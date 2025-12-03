@@ -14,6 +14,7 @@ import { Pricing } from './pages/Pricing';
 import { StripeSuccess } from './pages/stripe/Success';
 import { DataSources } from './pages/DataSources';
 import { Workspace } from './pages/Workspace';
+import { GlobalCoPilot } from './components/GlobalCoPilot';
 
 // Protected Route Wrapper
 const ProtectedRoute: React.FC<{ 
@@ -48,6 +49,7 @@ const AppLayout: React.FC<{ children: React.ReactNode, user: any, logout: () => 
                 <main className="flex-1 overflow-auto pb-12">
                     {children}
                 </main>
+                <GlobalCoPilot user={user} />
                 <FooterInfo user={user} />
             </div>
         </div>
