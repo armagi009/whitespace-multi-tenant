@@ -1,0 +1,6 @@
+name = "whitespace-multitenant"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+[vars]
+GEMINI_API_KEY = "your-gemini-api-key-here"  # Replace with actual key or set in dashboard

@@ -131,6 +131,7 @@ export const DeepDiveModal: React.FC<DeepDiveModalProps> = ({ opportunity, onClo
                                 </div>
                             </div>
 
+                            {/* Context & Evidence - Enhanced with Details */}
                             <div>
                                 <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Context & Evidence</h3>
                                 <p className="text-slate-700 leading-relaxed mb-4 p-4 bg-slate-50/50 border-l-4 border-primary-200 rounded-r-lg italic">
@@ -142,47 +143,92 @@ export const DeepDiveModal: React.FC<DeepDiveModalProps> = ({ opportunity, onClo
                                 </div>
                             </div>
 
-                            {/* AI Section */}
-                            <div className="border-t border-slate-200 pt-6">
-                                <div className="flex justify-between items-center mb-6">
-                                    <div className="flex items-center gap-2">
-                                        <div className="p-2 bg-slate-100 text-slate-600 rounded-lg">
-                                            <FileText size={18} />
-                                        </div>
-                                        <h3 className="text-lg font-bold text-slate-900">Strategic Briefing</h3>
+                            {/* Detailed Analysis Section - Show prominently if available */}
+                            {opportunity.details && (
+                                <div className="border-t border-slate-200 pt-6 space-y-6">
+                                    {/* Why It Matters */}
+                                    <div>
+                                        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Why It Matters</h3>
+                                        <p className="text-slate-700 leading-relaxed">{opportunity.details.whyItMatters}</p>
                                     </div>
 
-                                    {!brief && (
-                                        <button
-                                            onClick={handleGenerateBrief}
-                                            disabled={isGeneratingBrief}
-                                            className="px-5 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
-                                        >
-                                            {isGeneratingBrief ? 'Analyzing...' : 'Generate Briefing'}
-                                        </button>
+                                    {/* Evidence Highlights */}
+                                    {opportunity.details.evidenceHighlights && opportunity.details.evidenceHighlights.length > 0 && (
+                                        <div>
+                                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Evidence Highlights</h3>
+                                            <ul className="space-y-2">
+                                                {opportunity.details.evidenceHighlights.map((highlight, index) => (
+                                                    <li key={index} className="flex items-start gap-2 text-slate-700">
+                                                        <span className="text-slate-400 mt-1">•</span>
+                                                        <span>{highlight}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {/* Money Trail */}
+                                    {opportunity.details.moneyTrail && (
+                                        <div>
+                                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Money Trail</h3>
+                                            <p className="text-slate-700 leading-relaxed bg-emerald-50 p-4 rounded-lg border-l-4 border-emerald-200">
+                                                {opportunity.details.moneyTrail}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Key Players */}
+                                    {opportunity.details.keyPlayers && opportunity.details.keyPlayers.length > 0 && (
+                                        <div>
+                                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Key Players</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {opportunity.details.keyPlayers.map((player, index) => (
+                                                    <span key={index} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">
+                                                        {player}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Risk Flags */}
+                                    {opportunity.details.riskFlags && opportunity.details.riskFlags.length > 0 && (
+                                        <div>
+                                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Risk Flags</h3>
+                                            <div className="space-y-2">
+                                                {opportunity.details.riskFlags.map((risk, index) => (
+                                                    <li key={index} className="flex items-start gap-2 text-amber-700">
+                                                        <span className="text-amber-500 mt-1">⚠</span>
+                                                        <span>{risk}</span>
+                                                    </li>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Curation Status */}
+                                    {opportunity.curation && (
+                                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Curation Status</h3>
+                                                <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                                    opportunity.curation.status === 'Published' ? 'bg-emerald-100 text-emerald-700' :
+                                                    opportunity.curation.status === 'Under Review' ? 'bg-amber-100 text-amber-700' :
+                                                    'bg-slate-100 text-slate-700'
+                                                }`}>
+                                                    {opportunity.curation.status}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-sm">
+                                                <span className="text-slate-600">Confidence: <span className="font-bold text-slate-900">{opportunity.curation.confidence}%</span></span>
+                                                {opportunity.curation.humanReviewer && (
+                                                    <span className="text-slate-600">Reviewed by: <span className="font-bold text-slate-900">{opportunity.curation.humanReviewer}</span></span>
+                                                )}
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
-
-                                {isGeneratingBrief && (
-                                    <div className="p-12 text-center">
-                                        <div className="animate-spin w-8 h-8 border-4 border-slate-200 border-t-slate-600 rounded-full mx-auto mb-4"></div>
-                                        <p className="text-slate-500 font-medium">Consulting the oracle...</p>
-                                    </div>
-                                )}
-
-                                {brief && (
-                                    <div className="prose prose-slate max-w-none bg-white p-1 rounded-xl text-slate-800">
-                                        <div dangerouslySetInnerHTML={{
-                                            __html: brief
-                                                .replace(/\n/g, '<br/>')
-                                                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900">$1</strong>')
-                                                .replace(/# (.*?)(<br\/>|$)/g, '<h1 class="text-xl font-bold mb-4 text-slate-900">$1</h1>')
-                                                .replace(/## (.*?)(<br\/>|$)/g, '<h2 class="text-lg font-bold mt-6 mb-3 text-primary-700">$1</h2>')
-                                                .replace(/^\d\.\s/gm, '<span class="inline-block w-6 font-bold text-slate-400">➤</span>')
-                                        }} />
-                                    </div>
-                                )}
-                            </div>
+                            )}
                         </div>
                     )}
 

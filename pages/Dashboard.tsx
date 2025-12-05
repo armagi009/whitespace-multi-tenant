@@ -132,6 +132,18 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center border-t lg:border-t-0 lg:border-l border-slate-100 lg:pl-4 pt-4 lg:pt-0">
+                {/* TEMPORARY Reset Button - Remove after use */}
+                {/*<button
+                    onClick={() => {
+                        localStorage.removeItem('whitespace_db_v1');
+                        window.location.reload();
+                    }}
+                    className="px-3 py-2 bg-red-100 text-red-700 text-sm font-medium rounded-lg hover:bg-red-200 transition-colors border border-red-200"
+                    title="Temporary button to reset cached data - remove after use"
+                >
+                    🔄 Reset Data
+                </button>*/}
+
                 {/* Impact Slider */}
                 <div className="flex flex-col justify-center min-w-[140px]">
                     <div className="flex justify-between text-xs text-slate-500 mb-1">

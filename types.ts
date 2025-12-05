@@ -49,6 +49,14 @@ export enum Vertical {
   FINTECH = 'FinTech',
   MEDTECH = 'MedTech',
   GOVTECH = 'GovTech',
+  RETAIL = 'Retail',
+  MANUFACTURING = 'Manufacturing',
+  AGRITECH = 'AgriTech',
+  EDTECH = 'EdTech',
+  PROPTECH = 'PropTech',
+  CLEANTECH = 'CleanTech',
+  INSURTECH = 'InsurTech',
+  LOGISTICS = 'Logistics',
   GENERAL = 'General',
 }
 
@@ -98,6 +106,18 @@ export interface Opportunity {
   opportunityType: OpportunityType;
   geography: string;
   status: 'Active' | 'Staging';
+  details?: {
+    whyItMatters: string;
+    evidenceHighlights: string[];
+    moneyTrail: string;
+    keyPlayers: string[];
+    riskFlags: string[];
+  };
+  curation?: {
+    status: 'New' | 'Under Review' | 'Published';
+    confidence: number; // 0-100
+    humanReviewer?: string;
+  };
 }
 
 export interface AuthState {
