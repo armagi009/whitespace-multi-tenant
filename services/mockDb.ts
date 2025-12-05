@@ -2,6 +2,14 @@ import { User, Tenant, Opportunity, UserRole, OpportunityTrend, Vertical, AuditL
 
 const STORAGE_KEY = 'whitespace_db_v1';
 
+// Generate personal confidence based on opportunity impact score with ±3 variation
+const generatePersonalConfidence = (impactScore: number): number => {
+  // Use impact score as base (system value) with ±3 random variation
+  const variation = Math.floor(Math.random() * 7) - 3; // -3 to +3
+  const confidence = Math.max(0, Math.min(100, impactScore + variation));
+  return confidence;
+};
+
 interface DB {
   users: User[];
   tenants: Tenant[];
@@ -1677,20 +1685,24 @@ export const mockDb = {
 
     const user = db.users[userIndex];
     if (user.bookmarks.includes(oppId)) {
+        // Remove bookmark and associated saved item
         user.bookmarks = user.bookmarks.filter(id => id !== oppId);
+        user.savedItems = user.savedItems.filter(item => item.oppId !== oppId);
     } else {
         user.bookmarks.push(oppId);
         // Initialize saved item if not exists
         if (!user.savedItems.some(item => item.oppId === oppId)) {
+            const opportunity = db.opportunities.find(o => o.id === oppId);
+            const systemConfidence = opportunity ? opportunity.impactScore : 75; // fallback to 75 if not found
             user.savedItems.push({
                 oppId,
                 note: '',
-                personalConfidence: 50,
+                personalConfidence: generatePersonalConfidence(systemConfidence),
                 savedAt: new Date().toISOString()
             });
         }
     }
-    
+
     db.users[userIndex] = user;
     saveDb(db);
     return user;
@@ -1707,10 +1719,12 @@ export const mockDb = {
       if (itemIndex >= 0) {
           user.savedItems[itemIndex] = { ...user.savedItems[itemIndex], ...updates };
       } else {
+          const opportunity = db.opportunities.find(o => o.id === oppId);
+          const systemConfidence = opportunity ? opportunity.impactScore : 75; // fallback to 75 if not found
           user.savedItems.push({
               oppId,
               note: '',
-              personalConfidence: 50,
+              personalConfidence: generatePersonalConfidence(systemConfidence),
               savedAt: new Date().toISOString(),
               ...updates
           });
