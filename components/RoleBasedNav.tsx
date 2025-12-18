@@ -6,9 +6,10 @@ import { LayoutDashboard, Users, CreditCard, Settings, ShieldCheck, PieChart, Lo
 interface RoleBasedNavProps {
   role: UserRole;
   onLogout: () => void;
+  tenantSlug?: string;
 }
 
-export const RoleBasedNav: React.FC<RoleBasedNavProps> = ({ role, onLogout }) => {
+export const RoleBasedNav: React.FC<RoleBasedNavProps> = ({ role, onLogout, tenantSlug }) => {
   const location = useLocation();
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -22,7 +23,7 @@ export const RoleBasedNav: React.FC<RoleBasedNavProps> = ({ role, onLogout }) =>
           { label: 'Settings', path: '/settings', icon: <Settings size={20} /> },
         ];
       case UserRole.TENANT_ADMIN:
-        return [
+        const adminItems = [
           { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
           { label: 'Workspace', path: '/workspace', icon: <Briefcase size={20} /> },
           { label: 'Data Sources', path: '/sources', icon: <Database size={20} /> },
@@ -30,13 +31,27 @@ export const RoleBasedNav: React.FC<RoleBasedNavProps> = ({ role, onLogout }) =>
           { label: 'Billing', path: '/pricing', icon: <CreditCard size={20} /> },
           { label: 'Settings', path: '/settings', icon: <Settings size={20} /> },
         ];
+        
+        // Add NSoft-specific route for utilities tenant
+        if (tenantSlug === 'nsoft-utilities') {
+          adminItems.splice(1, 0, { label: 'NSoft Intelligence', path: '/nsoft', icon: <PieChart size={20} /> });
+        }
+        
+        return adminItems;
       case UserRole.TENANT_USER:
-        return [
+        const userItems = [
           { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
           { label: 'Workspace', path: '/workspace', icon: <Briefcase size={20} /> },
           { label: 'Data Sources', path: '/sources', icon: <Database size={20} /> },
           { label: 'Settings', path: '/settings', icon: <Settings size={20} /> },
         ];
+        
+        // Add NSoft-specific route for utilities tenant
+        if (tenantSlug === 'nsoft-utilities') {
+          userItems.splice(1, 0, { label: 'NSoft Intelligence', path: '/nsoft', icon: <PieChart size={20} /> });
+        }
+        
+        return userItems;
       default:
         return [];
     }
@@ -50,7 +65,8 @@ export const RoleBasedNav: React.FC<RoleBasedNavProps> = ({ role, onLogout }) =>
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 bg-slate-900 text-white">
         <div className="flex items-center gap-2 font-bold text-xl">
-           <PieChart className="text-primary-500" /> WhiteSpace
+           <img src="/logo-square.png" alt="WhiteSpace Logo" className="w-12 h-12" />
+           WhiteSpace
         </div>
         <button onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
@@ -66,7 +82,7 @@ export const RoleBasedNav: React.FC<RoleBasedNavProps> = ({ role, onLogout }) =>
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 flex items-center gap-2 font-bold text-2xl tracking-tight border-b border-slate-800">
-            <PieChart className="text-primary-500" />
+            <img src="/logo-square.png" alt="WhiteSpace Logo" className="w-16 h-16" />
             <span>WhiteSpace</span>
           </div>
 

@@ -14,7 +14,9 @@ import { Pricing } from './pages/Pricing';
 import { StripeSuccess } from './pages/stripe/Success';
 import { DataSources } from './pages/DataSources';
 import { Workspace } from './pages/Workspace';
+import { NSoftDashboard } from './pages/NSoftDashboard';
 import { GlobalCoPilot } from './components/GlobalCoPilot';
+import { LandingPage } from './landing-page';
 
 // Protected Route Wrapper
 const ProtectedRoute: React.FC<{ 
@@ -44,7 +46,7 @@ const AppLayout: React.FC<{ children: React.ReactNode, user: any, logout: () => 
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-slate-50">
-            <RoleBasedNav role={user.role} onLogout={logout} />
+            <RoleBasedNav role={user.role} onLogout={logout} tenantSlug={user.tenantSlug} />
             <div className="flex-1 flex flex-col min-h-screen relative">
                 <main className="flex-1 overflow-auto pb-12">
                     {children}
@@ -61,6 +63,7 @@ function AppContent() {
     
     return (
         <Routes>
+            <Route path="/" element={!user ? <LandingPage onEnter={() => {}} /> : <Navigate to={user.role === UserRole.PLATFORM_ADMIN ? "/platform" : "/dashboard"} />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to={user.role === UserRole.PLATFORM_ADMIN ? "/platform" : "/dashboard"} />} />
             <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/dashboard" />} />
             
@@ -128,7 +131,15 @@ function AppContent() {
                 </ProtectedRoute>
             } />
 
-            <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="/nsoft" element={
+                <ProtectedRoute user={user} isLoading={isLoading} requiredRole={[UserRole.TENANT_ADMIN, UserRole.TENANT_USER]}>
+                     <AppLayout user={user} logout={logout}>
+                        <NSoftDashboard />
+                    </AppLayout>
+                </ProtectedRoute>
+            } />
+
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );
 }

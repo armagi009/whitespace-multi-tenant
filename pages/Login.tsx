@@ -30,7 +30,7 @@ export const Login: React.FC = () => {
       // Actually, since login sets state, App component will re-render and redirect.
       // But we can manually push to trigger faster feedback if needed.
     } else {
-      setError('Invalid credentials. Try "user@fintech.com" or "platform@saas.local"');
+      setError('Invalid credentials. Try "admin@smartutilities.com" or "platform@saas.local"');
     }
   };
 
@@ -38,8 +38,8 @@ export const Login: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100">
         <div className="flex flex-col items-center mb-8">
-            <div className="p-3 bg-slate-900 text-white rounded-xl mb-4">
-                <PieChart size={32} />
+            <div className="mb-4">
+                <img src="/logo-square.png" alt="WhiteSpace Logo" className="w-16 h-16" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">Welcome back</h1>
             <p className="text-slate-500">Sign in to WhiteSpace</p>
@@ -88,7 +88,7 @@ export const Login: React.FC = () => {
             <div className="grid grid-cols-2 gap-2 text-left">
                 <div><span className="font-bold">Platform:</span> platform@saas.local</div>
                 <div>Pass: pa1234</div>
-                <div><span className="font-bold">Tenant:</span> admin@fintech.com</div>
+                <div><span className="font-bold">Tenant:</span> admin@smartutilities.com</div>
                 <div>Pass: (any)</div>
             </div>
         </div>
